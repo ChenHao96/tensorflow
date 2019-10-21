@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="app_orientation_activity">Orientation Listener</string>
+    <string name="camera_preview_description">this preview display camera content</string>
+    <string name="switch_camera_description">switch camera</string>
+    <string name="open_camera">open camera</string>
+    <string name="open_audio">open audio</string>
+    <string name="open_orientation_record">open orientation record</string>
+    <string name="init_orientation_listener">init orientation listener</string>
+</resources>
