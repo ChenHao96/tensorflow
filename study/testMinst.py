@@ -5,7 +5,7 @@
 
 import tensorflow as tf
 
-import study01.input_data as input_data
+import study.input_data as input_data
 
 dataSet = input_data.read_data_sets("MNIST_data/", one_hot=True)
 x = tf.placeholder("float", [None, 784])
