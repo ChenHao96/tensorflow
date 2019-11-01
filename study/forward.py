@@ -1,3 +1,5 @@
+# use tensorflow-2.0
+
 import os
 
 import tensorflow as tf
