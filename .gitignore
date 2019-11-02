@@ -1,0 +1,5 @@
+/.idea/
+/deepLearning/perceptron/model.txt
+/deepLearning/perceptron/train-labels.txt
+/deepLearning/perceptron/train-datas.txt
+/study/MNIST_data/

@@ -3,9 +3,8 @@
 # tensorflow-1.12-cpu
 # http://www.tensorfly.cn/tfdoc/tutorials/mnist_beginners.html
 
+import input_data as input_data
 import tensorflow as tf
-
-import study.input_data as input_data
 
 dataSet = input_data.read_data_sets("MNIST_data/", one_hot=True)
 x = tf.placeholder("float", [None, 784])
