@@ -50,3 +50,5 @@ network.compile(optimizer=optimizers.Adam(lr=1e-3),
                 metrics=['accuracy'])
 
 network.fit(db, epochs=10, validation_data=db_test, validation_steps=1)
+
+network.evaluate(db_test)
