@@ -16,6 +16,7 @@ def preprocess(x, y):
 (x, y), (x_test, y_test) = datasets.fashion_mnist.load_data()
 
 batchSize = 128
+inputShape = 28 * 28
 
 db = tf.data.Dataset.from_tensor_slices((x, y))
 # map 数据预处理, shuffle 数据打乱, batch 一次读取多少数据
@@ -23,8 +24,6 @@ db = db.map(preprocess).shuffle(10000).batch(batchSize)
 
 db_test = tf.data.Dataset.from_tensor_slices((x_test, y_test))
 db_test = db_test.map(preprocess).batch(batchSize)
-
-inputShape = 28 * 28
 
 model = Sequential([
     layers.Dense(768, activation=tf.nn.relu),
@@ -51,7 +50,7 @@ accuracy = metrics.Accuracy()
 def main():
     for epoch in range(20):
         for step, (x, y) in enumerate(db):
-            x = tf.reshape(x, [-1, inputShape])
+            x = tf.reshape(x, (-1, inputShape))
             y_onehot = tf.one_hot(y, depth=10)
             with tf.GradientTape() as tape:
                 logits = model(x)
@@ -68,7 +67,7 @@ def main():
 
         accuracy.reset_states()
         for (x, y) in db_test:
-            x = tf.reshape(x, [-1, inputShape])
+            x = tf.reshape(x, (-1, inputShape))
             logits = model(x)
             pro = tf.nn.softmax(logits, axis=1)
             pro = tf.cast(tf.argmax(pro, axis=1), dtype=tf.int32)
