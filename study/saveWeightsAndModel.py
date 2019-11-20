@@ -48,8 +48,7 @@ network.summary()
 network.load_weights("checkpoint/fashion.ckpt")
 network.fit(db, epochs=10, validation_data=db_test, validation_steps=1)
 network.save_weights("checkpoint/fashion.ckpt")
-network.save("fashion.h5")
-tf.saved_model.save(network,"model/fashion.n")
+network.save("model/fashion")
 del network
 
 network = createNetWork()
