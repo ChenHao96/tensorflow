@@ -3,3 +3,7 @@
 /deepLearning/perceptron/train-labels.txt
 /deepLearning/perceptron/train-datas.txt
 /study/MNIST_data/
+/study/checkpoint
+/study/fashion.data-00000-of-00001
+/study/fashion.index
+/study/fashion.h5
