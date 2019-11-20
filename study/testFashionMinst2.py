@@ -6,25 +6,23 @@ from tensorflow.keras import datasets, Sequential, layers, optimizers
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+batchSize = 128
+inputShape = 28 * 28
+
 
 def preprocess(x, y):
     x = tf.cast(x, dtype=tf.float32) / 255.
+    x = tf.reshape(x, (-1, inputShape))
     y = tf.cast(y, dtype=tf.int32)
+    y = tf.one_hot(y, depth=10)
     return x, y
 
 
 (x, y), (x_test, y_test) = datasets.fashion_mnist.load_data()
 
-batchSize = 128
-inputShape = 28 * 28
-
-x = tf.reshape(x, (-1, inputShape))
-y = tf.one_hot(y, depth=10)
 db = tf.data.Dataset.from_tensor_slices((x, y))
-db = db.map(preprocess).shuffle(10000).batch(batchSize)
+db = db.map(preprocess).shuffle(x.shape[0]).batch(batchSize)
 
-x_test = tf.reshape(x_test, (-1, inputShape))
-y_test = tf.one_hot(y_test, depth=10)
 db_test = tf.data.Dataset.from_tensor_slices((x_test, y_test))
 db_test = db_test.map(preprocess).batch(batchSize)
 
@@ -40,6 +38,7 @@ network = Sequential([
     layers.Dense(64, activation=tf.nn.relu),
     layers.Dense(42, activation=tf.nn.relu),
     layers.Dense(32, activation=tf.nn.relu),
+    layers.Dense(22, activation=tf.nn.relu),
     layers.Dense(10)
 ])
 network.build(input_shape=[None, inputShape])
