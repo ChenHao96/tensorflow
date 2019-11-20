@@ -45,10 +45,10 @@ network = createNetWork()
 network.build(input_shape=[None, inputShape])
 network.summary()
 # TODO: not first
-network.load_weights("checkpoint/fashion.ckpt")
+# network.load_weights("checkpoint/fashion.ckpt")
 network.fit(db, epochs=10, validation_data=db_test, validation_steps=1)
 network.save_weights("checkpoint/fashion.ckpt")
-network.save("model/fashion")
+network.save("fashion.h5")
 del network
 
 network = createNetWork()
