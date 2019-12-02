@@ -58,7 +58,7 @@ fc_net.summary()
 lossMean = metrics.Mean()
 accuracy = metrics.Accuracy()
 
-optimizer = optimizers.Adam(lr=1e-4)
+optimizer = optimizers.Adam(lr=1e-3)
 variables = cnn_net.trainable_variables + fc_net.trainable_variables
 
 # cnn_net.load_weights("checkpoint/testCNN.cnn")
