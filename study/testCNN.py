@@ -15,13 +15,10 @@ def preprocess(x, y):
 
 batchSize = 128
 (x, y), (val_x, val_y) = datasets.cifar100.load_data()
-# print(x.shape, x.min(), x.max())
-# print(y.shape, y.min(), y.max())
 
 y = tf.one_hot(y, depth=100)
 y = tf.squeeze(y)
 val_y = tf.squeeze(val_y)
-# print(y.shape)
 
 train_db = tf.data.Dataset.from_tensor_slices((x, y))
 train_db = train_db.map(preprocess).shuffle(10000).batch(batchSize)
@@ -64,8 +61,8 @@ accuracy = metrics.Accuracy()
 optimizer = optimizers.Adam(lr=1e-4)
 variables = cnn_net.trainable_variables + fc_net.trainable_variables
 
-cnn_net.load_weights("checkpoint/testCNN.cnn")
-fc_net.load_weights("checkpoint/testCNN.fc")
+# cnn_net.load_weights("checkpoint/testCNN.cnn")
+# fc_net.load_weights("checkpoint/testCNN.fc")
 
 for epoch in range(100):
     for step, (x, y) in enumerate(train_db):
@@ -91,8 +88,10 @@ for epoch in range(100):
             logits = fc_net(out)
             pro = tf.nn.softmax(logits, axis=1)
             pro = tf.cast(tf.argmax(pro, axis=1), dtype=tf.int32)
-            # print(y.shape, pro.shape)
             accuracy.update_state(y, pro)
         print(epoch, "test correct:", accuracy.result().numpy())
-        cnn_net.save_weights("checkpoint/testCNN.cnn")
-        fc_net.save_weights("checkpoint/testCNN.fc")
+
+    cnn_net.save_weights("checkpoint/testCNN.cnn")
+    fc_net.save_weights("checkpoint/testCNN.fc")
+
+
