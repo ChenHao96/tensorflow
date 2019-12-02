@@ -21,7 +21,7 @@ y = tf.squeeze(y)
 val_y = tf.squeeze(val_y)
 
 train_db = tf.data.Dataset.from_tensor_slices((x, y))
-train_db = train_db.map(preprocess).shuffle(10000).batch(batchSize)
+train_db = train_db.map(preprocess).shuffle(20000).batch(batchSize)
 
 val_db = tf.data.Dataset.from_tensor_slices((val_x, val_y))
 val_db = val_db.map(preprocess).batch(batchSize)
@@ -58,7 +58,7 @@ fc_net.summary()
 lossMean = metrics.Mean()
 accuracy = metrics.Accuracy()
 
-optimizer = optimizers.Adam(lr=1e-3)
+optimizer = optimizers.Adam(lr=3.1415926e-4)
 variables = cnn_net.trainable_variables + fc_net.trainable_variables
 
 # cnn_net.load_weights("checkpoint/testCNN.cnn")
