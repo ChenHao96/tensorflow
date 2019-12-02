@@ -61,10 +61,12 @@ accuracy = metrics.Accuracy()
 optimizer = optimizers.Adam(lr=1e-4)
 variables = cnn_net.trainable_variables + fc_net.trainable_variables
 
-# cnn_net.load_weights("checkpoint/testCNN.cnn")
-# fc_net.load_weights("checkpoint/testCNN.fc")
+cnn_net.load_weights("checkpoint/testCNN.cnn")
+fc_net.load_weights("checkpoint/testCNN.fc")
 
+history_acc = 0
 for epoch in range(100):
+
     for step, (x, y) in enumerate(train_db):
         with tf.GradientTape() as tape:
             out = cnn_net(x)
@@ -80,18 +82,17 @@ for epoch in range(100):
             print(epoch, step, "train loss:", lossMean.result().numpy())
             lossMean.reset_states()
 
-    if epoch % 10 == 0:
-        accuracy.reset_states()
-        for (x, y) in val_db:
-            out = cnn_net(x)
-            out = tf.reshape(out, (-1, fc_input_shape))
-            logits = fc_net(out)
-            pro = tf.nn.softmax(logits, axis=1)
-            pro = tf.cast(tf.argmax(pro, axis=1), dtype=tf.int32)
-            accuracy.update_state(y, pro)
-        print(epoch, "test correct:", accuracy.result().numpy())
+    accuracy.reset_states()
+    for (x, y) in val_db:
+        out = cnn_net(x)
+        out = tf.reshape(out, (-1, fc_input_shape))
+        logits = fc_net(out)
+        pro = tf.nn.softmax(logits, axis=1)
+        pro = tf.cast(tf.argmax(pro, axis=1), dtype=tf.int32)
+        accuracy.update_state(y, pro)
 
-    cnn_net.save_weights("checkpoint/testCNN.cnn")
-    fc_net.save_weights("checkpoint/testCNN.fc")
-
-
+    print(epoch, "test correct:", accuracy.result().numpy())
+    if accuracy.result().numpy() > history_acc:
+        history_acc = accuracy.result().numpy()
+        cnn_net.save_weights("checkpoint/testCNN.cnn")
+        fc_net.save_weights("checkpoint/testCNN.fc")
