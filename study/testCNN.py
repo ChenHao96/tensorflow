@@ -61,8 +61,8 @@ accuracy = metrics.Accuracy()
 optimizer = optimizers.Adam(lr=1e-4)
 variables = cnn_net.trainable_variables + fc_net.trainable_variables
 
-cnn_net.load_weights("checkpoint/testCNN.cnn")
-fc_net.load_weights("checkpoint/testCNN.fc")
+# cnn_net.load_weights("checkpoint/testCNN.cnn")
+# fc_net.load_weights("checkpoint/testCNN.fc")
 
 history_acc = 0
 for epoch in range(100):
