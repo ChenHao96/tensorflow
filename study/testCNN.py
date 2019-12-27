@@ -26,7 +26,8 @@ val_db = val_db.map(preprocess).batch(100)
 
 fc_input_shape = 512
 
-cnn_net = Sequential([
+# vgg13
+conv_net = Sequential([
     layers.Conv2D(64, kernel_size=[3, 3], padding='same', activation=tf.nn.relu),
     layers.Conv2D(64, kernel_size=[3, 3], padding='same', activation=tf.nn.relu),
     layers.MaxPool2D(pool_size=[2, 2], strides=2, padding='same'),
@@ -43,8 +44,8 @@ cnn_net = Sequential([
     layers.Conv2D(fc_input_shape, kernel_size=[3, 3], padding='same', activation=tf.nn.relu),
     layers.MaxPool2D(pool_size=[2, 2], strides=2, padding='same')
 ])
-cnn_net.build(input_shape=[None, 32, 32, 3])
-cnn_net.summary()
+conv_net.build(input_shape=[None, 32, 32, 3])
+conv_net.summary()
 
 fc_net = Sequential([
     layers.Dense(256, activation=tf.nn.relu),
@@ -58,9 +59,9 @@ lossMean = metrics.Mean()
 accuracy = metrics.Accuracy()
 
 optimizer = optimizers.Adam(lr=3.1415926e-4)
-variables = cnn_net.trainable_variables + fc_net.trainable_variables
+variables = conv_net.trainable_variables + fc_net.trainable_variables
 
-cnn_net.load_weights("checkpoint/testCNN.cnn")
+conv_net.load_weights("checkpoint/testCNN.cnn")
 fc_net.load_weights("checkpoint/testCNN.fc")
 
 history_acc = 0
@@ -68,7 +69,7 @@ for epoch in range(20):
 
     for step, (x, y) in enumerate(train_db):
         with tf.GradientTape() as tape:
-            out = cnn_net(x)
+            out = conv_net(x)
             out = tf.reshape(out, (-1, fc_input_shape))
             logits = fc_net(out)
             y = tf.one_hot(y, depth=100)
@@ -84,7 +85,7 @@ for epoch in range(20):
 
     accuracy.reset_states()
     for (x, y) in val_db:
-        out = cnn_net(x)
+        out = conv_net(x)
         out = tf.reshape(out, (-1, fc_input_shape))
         logits = fc_net(out)
         pro = tf.nn.softmax(logits, axis=1)
@@ -94,5 +95,5 @@ for epoch in range(20):
     print(epoch, "test correct:", accuracy.result().numpy())
     if accuracy.result().numpy() > history_acc:
         history_acc = accuracy.result().numpy()
-        cnn_net.save_weights("checkpoint/testCNN.cnn")
+        conv_net.save_weights("checkpoint/testCNN.cnn")
         fc_net.save_weights("checkpoint/testCNN.fc")
