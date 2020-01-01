@@ -3,7 +3,7 @@ import os
 
 import tensorflow as tf
 from resNet import ResNet
-from tensorflow.keras import datasets, metrics, optimizers
+from tensorflow.keras import datasets, optimizers, metrics
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 tf.random.set_seed(2345)
@@ -15,30 +15,12 @@ def preprocess(x, y):
     return x, y
 
 
-classes = 10
-## correct:92.59%
-(x, y), (val_x, val_y) = datasets.fashion_mnist.load_data()
-## correct:99.11%
-# (x, y), (val_x, val_y) = datasets.mnist.load_data()
-input_shape = (None, 28, 28, 1)
-x = tf.reshape(x, (-1, 28, 28, 1))
-val_x = tf.reshape(val_x, (-1, 28, 28, 1))
+classes = 100
+(x, y), (val_x, val_y) = datasets.cifar100.load_data()
 
-
-# classes = 10
-## correct:79.23%
-# (x, y), (val_x, val_y) = datasets.cifar10.load_data()
-
-# classes = 100
-## correct:45.18%
-# (x, y), (val_x, val_y) = datasets.cifar100.load_data()
-
-# input_shape = (None, 32, 32, 3)
-# y = tf.squeeze(y, axis=1)
-# val_y = tf.squeeze(val_y, axis=1)
-# y = tf.squeeze(y, axis=1)
-# val_y = tf.squeeze(val_y, axis=1)
-
+input_shape = (None, 32, 32, 3)
+y = tf.squeeze(y, axis=1)
+val_y = tf.squeeze(val_y, axis=1)
 
 train_db = tf.data.Dataset.from_tensor_slices((x, y))
 train_db = train_db.map(preprocess).shuffle(10000).batch(250)
@@ -50,12 +32,10 @@ model = ResNet(layer_dims=[2, 2, 2, 2], classes_num=classes)
 model.build(input_shape=input_shape)
 model.summary()
 
-lossMean = metrics.Mean()
-accuracy = metrics.Accuracy()
-
 optimizer = optimizers.Adam(lr=3.1415926e-4)
 
-# model.load_weights("checkpoint/testResNet")
+lossMean = metrics.Mean()
+accuracy = metrics.Accuracy()
 
 history_acc = 0
 for epoch in range(20):
@@ -82,6 +62,3 @@ for epoch in range(20):
         accuracy.update_state(y, pro)
 
     print(epoch, "test correct:", accuracy.result().numpy())
-    # if accuracy.result().numpy() > history_acc:
-    #     history_acc = accuracy.result().numpy()
-    #     model.save_weights("checkpoint/testResNet")
