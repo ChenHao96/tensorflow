@@ -69,7 +69,7 @@ class Figure6(layers.Layer):
         ])
 
         self.branches3 = Sequential([
-            layers.MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding="same"),
+            layers.MaxPool2D(pool_size=(3, 3), strides=1, padding="same"),
             layers.Conv2D(320, kernel_size=(1, 1), strides=1),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -124,7 +124,7 @@ class Figure7(layers.Layer):
         ])
 
         self.branches3 = Sequential([
-            layers.MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding="same"),
+            layers.MaxPool2D(pool_size=(3, 3), strides=1, padding="same"),
             layers.Conv2D(512, kernel_size=(1, 1), strides=1),
             layers.BatchNormalization(),
             layers.Activation("relu")
