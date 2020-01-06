@@ -10,22 +10,32 @@ class Figure5(layers.Layer):
         super(Figure5, self).__init__()
 
         self.branches1 = Sequential([
-            layers.Conv2D(128, kernel_size=(1, 1), strides=1),
-            layers.Conv2D(128, kernel_size=(3, 3), strides=1, padding="same"),
-            layers.Conv2D(192, kernel_size=(3, 3), strides=1, padding="same")
+            layers.Conv2D(128, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
+            layers.Conv2D(128, kernel_size=(3, 3), strides=1, activation=tf.nn.relu, padding="same"),
+            layers.Conv2D(192, kernel_size=(3, 3), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
 
         self.branches2 = Sequential([
-            layers.Conv2D(128, kernel_size=(1, 1), strides=1),
+            layers.Conv2D(128, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
             layers.Conv2D(192, kernel_size=(3, 3), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
 
         self.branches3 = Sequential([
-            layers.MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding="same"),
-            layers.Conv2D(192, kernel_size=(1, 1), strides=1)
+            layers.MaxPool2D(pool_size=(3, 3), strides=1, padding="same"),
+            layers.Conv2D(192, kernel_size=(1, 1), strides=1),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
 
-        self.branches4 = layers.Conv2D(192, kernel_size=(1, 1), strides=1)
+        self.branches4 = Sequential([
+            layers.Conv2D(192, kernel_size=(1, 1), strides=1),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
+        ])
         pass
 
     def call(self, inputs, training=None):
@@ -41,25 +51,35 @@ class Figure6(layers.Layer):
         super(Figure6, self).__init__()
 
         self.branches1 = Sequential([
-            layers.Conv2D(256, kernel_size=(1, 1), strides=1),
-            layers.Conv2D(256, kernel_size=(1, 7), strides=1, padding="same"),
-            layers.Conv2D(256, kernel_size=(7, 1), strides=1, padding="same"),
-            layers.Conv2D(320, kernel_size=(1, 7), strides=1, padding="same"),
-            layers.Conv2D(320, kernel_size=(7, 1), strides=1, padding="same")
+            layers.Conv2D(256, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
+            layers.Conv2D(256, kernel_size=(1, 7), strides=1, activation=tf.nn.relu, padding="same"),
+            layers.Conv2D(256, kernel_size=(7, 1), strides=1, activation=tf.nn.relu, padding="same"),
+            layers.Conv2D(320, kernel_size=(1, 7), strides=1, activation=tf.nn.relu, padding="same"),
+            layers.Conv2D(320, kernel_size=(7, 1), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
 
         self.branches2 = Sequential([
-            layers.Conv2D(256, kernel_size=(1, 1), strides=1),
-            layers.Conv2D(320, kernel_size=(1, 7), strides=1, padding="same"),
-            layers.Conv2D(320, kernel_size=(7, 1), strides=1, padding="same")
+            layers.Conv2D(256, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
+            layers.Conv2D(320, kernel_size=(1, 7), strides=1, activation=tf.nn.relu, padding="same"),
+            layers.Conv2D(320, kernel_size=(7, 1), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
 
         self.branches3 = Sequential([
             layers.MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding="same"),
-            layers.Conv2D(320, kernel_size=(1, 1), strides=1)
+            layers.Conv2D(320, kernel_size=(1, 1), strides=1),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
 
-        self.branches4 = layers.Conv2D(320, kernel_size=(1, 1), strides=1)
+        self.branches4 = self.branches4 = Sequential([
+            layers.Conv2D(320, kernel_size=(1, 1), strides=1),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
+        ])
         pass
 
     def call(self, inputs, training=None):
@@ -75,22 +95,46 @@ class Figure7(layers.Layer):
         super(Figure7, self).__init__()
 
         self.branches1 = Sequential([
-            layers.Conv2D(256, kernel_size=(1, 1), strides=1),
-            layers.Conv2D(512, kernel_size=(3, 3), strides=1, padding="same")
+            layers.Conv2D(256, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
+            layers.Conv2D(512, kernel_size=(3, 3), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
-        self.branches1_1 = layers.Conv2D(256, kernel_size=(1, 3), strides=1, padding="same")
-        self.branches1_2 = layers.Conv2D(256, kernel_size=(3, 1), strides=1, padding="same")
+        self.branches1_1 = Sequential([
+            layers.Conv2D(256, kernel_size=(1, 3), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
+        ])
+        self.branches1_2 = Sequential([
+            layers.Conv2D(256, kernel_size=(3, 1), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
+        ])
 
-        self.branches2 = layers.Conv2D(512, kernel_size=(1, 1), strides=1)
-        self.branches2_1 = layers.Conv2D(256, kernel_size=(1, 3), strides=1, padding="same")
-        self.branches2_1 = layers.Conv2D(256, kernel_size=(3, 1), strides=1, padding="same")
+        self.branches2 = layers.Conv2D(512, kernel_size=(1, 1), strides=1, activation=tf.nn.relu)
+        self.branches2_1 = Sequential([
+            layers.Conv2D(256, kernel_size=(1, 3), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
+        ])
+        self.branches2_2 = Sequential([
+            layers.Conv2D(256, kernel_size=(3, 1), strides=1, padding="same"),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
+        ])
 
         self.branches3 = Sequential([
             layers.MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding="same"),
-            layers.Conv2D(512, kernel_size=(1, 1), strides=1)
+            layers.Conv2D(512, kernel_size=(1, 1), strides=1),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
         ])
 
-        self.branches4 = layers.Conv2D(512, kernel_size=(1, 1), strides=1)
+        self.branches4 = self.branches4 = Sequential([
+            layers.Conv2D(512, kernel_size=(1, 1), strides=1),
+            layers.BatchNormalization(),
+            layers.Activation("relu")
+        ])
         pass
 
     def call(self, inputs, training=None):
@@ -110,13 +154,13 @@ class InceptionV3(keras.Model):
         super(InceptionV3, self).__init__()
 
         self.stem = Sequential([
-            layers.Conv2D(32, kernel_size=(3, 3), strides=(2, 2)),
-            layers.Conv2D(32, kernel_size=(3, 3), strides=(1, 1)),
-            layers.Conv2D(64, kernel_size=(3, 3), strides=(1, 1), padding="same"),
-            layers.MaxPool2D(pool_size=(3, 3), strides=(2, 2)),
-            layers.Conv2D(80, kernel_size=(3, 3), strides=(1, 1)),
-            layers.Conv2D(192, kernel_size=(3, 3), strides=(2, 2)),
-            layers.Conv2D(228, kernel_size=(3, 3), strides=(1, 1))
+            layers.Conv2D(32, kernel_size=(3, 3), strides=2, activation=tf.nn.relu),
+            layers.Conv2D(32, kernel_size=(3, 3), strides=1, activation=tf.nn.relu),
+            layers.Conv2D(64, kernel_size=(3, 3), strides=1, activation=tf.nn.relu, padding="same"),
+            layers.MaxPool2D(pool_size=(3, 3), strides=2),
+            layers.Conv2D(80, kernel_size=(3, 3), strides=1, activation=tf.nn.relu),
+            layers.Conv2D(192, kernel_size=(3, 3), strides=2, activation=tf.nn.relu),
+            layers.Conv2D(228, kernel_size=(3, 3), strides=1, activation=tf.nn.relu)
         ])
 
         self.figure5 = Sequential([
