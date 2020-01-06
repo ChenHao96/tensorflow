@@ -11,8 +11,11 @@ class Figure5(layers.Layer):
 
         # 35,35,228 -> 17,17,192
         self.branches1 = Sequential([
+            # 35,35,228 -> 35,35,192
             layers.Conv2D(192, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
+            # 35,35,192 -> 17,17,192
             layers.Conv2D(192, kernel_size=(3, 3), strides=2, activation=tf.nn.relu),
+            # 17, 17, 192 -> 17,17,192
             layers.Conv2D(192, kernel_size=(3, 3), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -20,7 +23,9 @@ class Figure5(layers.Layer):
 
         # 35,35,228 -> 17,17,192
         self.branches2 = Sequential([
+            # 35,35,228 -> 35,35,192
             layers.Conv2D(192, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
+            # 35,35,192 -> 17,17,192
             layers.Conv2D(192, kernel_size=(3, 3), strides=2),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -28,7 +33,9 @@ class Figure5(layers.Layer):
 
         # 35,35,228 -> 17,17,192
         self.branches3 = Sequential([
+            # 35,35,228 -> 17,17,228
             layers.MaxPool2D(pool_size=(3, 3), strides=2),
+            # 17,17,228 -> 17,17,192
             layers.Conv2D(192, kernel_size=(1, 1), strides=1),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -57,14 +64,15 @@ class Figure6(layers.Layer):
 
         # 17,17,768 -> 8,8,320
         self.branches1 = Sequential([
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
-            # TODO: strides
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(1, 3), strides=2, activation=tf.nn.relu),
-            # TODO: strides
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(3, 1), strides=1, activation=tf.nn.relu, padding="same"),
-            # TODO: strides
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(1, 3), strides=1, activation=tf.nn.relu, padding="same"),
-            # TODO: strides
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(3, 1), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -72,10 +80,11 @@ class Figure6(layers.Layer):
 
         # 17,17,768 -> 8,8,320
         self.branches2 = Sequential([
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
-            # TODO: strides
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(1, 3), strides=2, activation=tf.nn.relu),
-            # TODO: strides
+            # TODO: kernel_size,strides
             layers.Conv2D(320, kernel_size=(3, 1), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -112,19 +121,23 @@ class Figure7(layers.Layer):
 
         # 8,8,1280 -> 8,8,512
         self.branches1 = Sequential([
+            # 8,8,1280 -> 8,8,512
             layers.Conv2D(512, kernel_size=(1, 1), strides=1, activation=tf.nn.relu),
+            # 8,8,512 -> 8,8,512
             layers.Conv2D(512, kernel_size=(3, 3), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
         ])
         # 8,8,512 -> 8,8,256
         self.branches1_1 = Sequential([
+            # TODO: kernel_size,strides
             layers.Conv2D(256, kernel_size=(1, 3), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
         ])
         # 8,8,512 -> 8,8,256
         self.branches1_2 = Sequential([
+            # TODO: kernel_size,strides
             layers.Conv2D(256, kernel_size=(3, 1), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -138,12 +151,14 @@ class Figure7(layers.Layer):
         ])
         # 8,8,512 -> 8,8,256
         self.branches2_1 = Sequential([
+            # TODO: kernel_size,strides
             layers.Conv2D(256, kernel_size=(1, 3), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
         ])
         # 8,8,512 -> 8,8,256
         self.branches2_2 = Sequential([
+            # TODO: kernel_size,strides
             layers.Conv2D(256, kernel_size=(3, 1), strides=1, padding="same"),
             layers.BatchNormalization(),
             layers.Activation("relu")
@@ -183,30 +198,24 @@ class InceptionV3(keras.Model):
         super(InceptionV3, self).__init__()
 
         self.stem = Sequential([
-            # 32,32,3 -> 16,16,32
             # 299,299,3 -> 149,149,32
             layers.Conv2D(32, kernel_size=(3, 3), strides=2, activation=tf.nn.relu),
-            # 16,16,32 -> 14,14,32
             # 149,149,32 -> 147,147,32
             layers.Conv2D(32, kernel_size=(3, 3), strides=1, activation=tf.nn.relu),
-            # 14,14,32 -> 14,14,64
             # 147,147,32 -> 147,147,64
             layers.Conv2D(64, kernel_size=(3, 3), strides=1, activation=tf.nn.relu, padding="same"),
-            # 14,14,64 -> 7,7,64
             # 147,147,64 -> 73,73,64
             layers.MaxPool2D(pool_size=(3, 3), strides=2),
-            # 7,7,64 -> 5,5,80
             # 73,73,64 -> 71,71,80
             layers.Conv2D(80, kernel_size=(3, 3), strides=1, activation=tf.nn.relu),
-            # 5,5,80 -> 2,2,192
             # 71,71,80 -> 35,35,192
             layers.Conv2D(192, kernel_size=(3, 3), strides=2, activation=tf.nn.relu),
-            # 2,2,192 -> BUG
             # 35,35,192 -> 35,35,228
             layers.Conv2D(228, kernel_size=(3, 3), strides=1, activation=tf.nn.relu, padding="same")
         ])
 
         # 35,35,228 -> 17,17,768
+        # TODO: 3*Figure5
         self.figure5 = Sequential([
             Figure5(),
             Figure5(),
@@ -214,7 +223,7 @@ class InceptionV3(keras.Model):
         ])
 
         # 17,17,768 -> 8,8,1280
-        # TODO:
+        # TODO: 5*Figure6
         self.figure6 = Sequential([
             Figure6(),
             Figure6(),
@@ -224,6 +233,7 @@ class InceptionV3(keras.Model):
         ])
 
         # 8,8,1280 -> 8,8,2048
+        # TODO: 2*Figure7
         self.figure7 = Sequential([
             Figure7(),
             Figure7()
